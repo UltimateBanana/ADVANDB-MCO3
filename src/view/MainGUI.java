@@ -14,20 +14,27 @@ import javax.swing.JScrollPane;
 import javax.swing.JButton;
 
 import java.awt.Font;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JTable;
 
+import controller.Controller;
+import javax.swing.JLabel;
+
 public class MainGUI extends JFrame implements ActionListener {
 
+	private Controller controller;
+	private DefaultTableModel defaultTableModel;
+	
 	private JPanel contentPane;
 	private JTextArea textAreaQuery;
 	private JButton buttonClearQuery, buttonExecute, buttonReadUncommitted, buttonReadCommitted, buttonReadRepeatable, buttonSerializable;
-	private JScrollPane scrollPaneTextArea;
-	private JScrollPane scrollPaneTable;
+	private JScrollPane scrollPaneTextArea, scrollPaneTable;
 	private JTable table;
-	
-	private DefaultTableModel defaultTableModel;
-//	private
+	private JLabel labelRowsReturned, labelQueryRuntime;
 //	private
 //	private
 //	private
@@ -36,22 +43,14 @@ public class MainGUI extends JFrame implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainGUI frame = new MainGUI();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	
 
 	/**
 	 * Create the frame.
 	 */
 	public MainGUI() {
+		controller = new Controller();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 500);
 		setResizable(false);
@@ -109,6 +108,14 @@ public class MainGUI extends JFrame implements ActionListener {
 		scrollPaneTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPaneTable.setBounds(392, 6, 802, 466);
 		contentPane.add(scrollPaneTable);
+		
+		labelRowsReturned = new JLabel("");
+		labelRowsReturned.setBounds(134, 420, 210, 16);
+		contentPane.add(labelRowsReturned);
+		
+		labelQueryRuntime = new JLabel("");
+		labelQueryRuntime.setBounds(135, 448, 210, 16);
+		contentPane.add(labelQueryRuntime);
 	}
 
 // ACTION LISTENERS
@@ -118,10 +125,22 @@ public class MainGUI extends JFrame implements ActionListener {
 		if(e.getSource() == buttonClearQuery)
 		{
 			textAreaQuery.setText("");
+			System.out.println("TextArea CLEARED!");
 		}
 		else if(e.getSource() == buttonExecute)
 		{
-			
+			try
+			{
+				// Passing the query from text area to controller.getData()
+				String sql = textAreaQuery.getText().toString();
+				populateTable(controller.getData(sql));
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+				// For Null Pointer Exception
+				System.out.println("EMPTY QUERY! Executed nothing.");
+			}
 		}
 		else if(e.getSource() == buttonReadUncommitted)
 		{
@@ -139,5 +158,88 @@ public class MainGUI extends JFrame implements ActionListener {
 		{
 			
 		}
+	}
+	
+	// Populates the JTable using the ResultSet parameter
+	private void populateTable(ResultSet rs)
+	{
+		ResultSetMetaData rsdm = null;
+		int colCount = 0;
+		
+		// get ResultMetaData to get column header
+		// get column count
+		try
+		{
+			rsdm = rs.getMetaData();
+			colCount = rsdm.getColumnCount();
+		}
+		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// get column headers
+		String[] columns = new String[colCount];
+		for( int i = 0; i < colCount; i++ )
+		{
+			try
+			{
+				columns[i] = rsdm.getColumnLabel(i+1);
+			}
+			catch (SQLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		// get table data
+		ArrayList<Object[]> rows = new ArrayList<Object[]>(0);
+		
+		try
+		{
+			while(rs.next())
+			{
+				Object[] rowData = new Object[colCount];
+				for( int i = 0; i < colCount; i++ )
+				{
+					rowData[i] = rs.getObject(i+1);
+				}
+				rows.add(rowData);
+			}
+		}
+		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		defaultTableModel = new DefaultTableModel(arraylistToObjectArray(rows), columns);
+		table.setModel(defaultTableModel);
+		
+		if( colCount <= 5 )
+		{
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		}
+		else
+		{
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		}
+		
+		labelRowsReturned.setText("Rows returned: " + rows.size() + " rows");
+		labelQueryRuntime.setText("Query Runtime: " + controller.getQueryTime() / 1000 + " seconds");
+	}
+	
+	// convert ArrayList<Object[]> to Object[][]
+	private Object[][] arraylistToObjectArray( ArrayList<Object[]> list )
+	{
+		Object[][] newList = new Object[list.size()][];
+		for( int i = 0; i < list.size(); i++ )
+		{
+			newList[i] = list.get(i);
+		}
+		
+		return newList;
 	}
 }
