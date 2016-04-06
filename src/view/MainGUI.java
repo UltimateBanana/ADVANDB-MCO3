@@ -23,6 +23,7 @@ import javax.swing.JTable;
 
 import controller.Controller;
 import javax.swing.JLabel;
+import javax.swing.JCheckBox;
 
 public class MainGUI extends JFrame implements ActionListener {
 
@@ -35,7 +36,7 @@ public class MainGUI extends JFrame implements ActionListener {
 	private JScrollPane scrollPaneTextArea, scrollPaneTable;
 	private JTable table;
 	private JLabel labelRowsReturned, labelQueryRuntime;
-//	private
+	private JCheckBox chckbxNode1, chckbxNode2, chckbxNode3;
 //	private
 //	private
 //	private
@@ -52,7 +53,7 @@ public class MainGUI extends JFrame implements ActionListener {
 		controller = new Controller();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1200, 500);
+		setBounds(100, 100, 1200, 550);
 		setResizable(false);
 		setVisible(true);
 		contentPane = new JPanel();
@@ -71,32 +72,32 @@ public class MainGUI extends JFrame implements ActionListener {
 		contentPane.add(scrollPaneTextArea);
 		
 		buttonClearQuery = new JButton("Clear Query");
-		buttonClearQuery.setBounds(6, 443, 117, 29);
+		buttonClearQuery.setBounds(6, 493, 117, 29);
 		buttonClearQuery.addActionListener(this);
 		contentPane.add(buttonClearQuery);
 		
 		buttonExecute = new JButton("Execute");
-		buttonExecute.setBounds(6, 415, 117, 29);
+		buttonExecute.setBounds(6, 465, 117, 29);
 		buttonExecute.addActionListener(this);
 		contentPane.add(buttonExecute);
 		
 		buttonReadUncommitted = new JButton("Read Uncommitted");
-		buttonReadUncommitted.setBounds(6, 353, 163, 29);
+		buttonReadUncommitted.setBounds(6, 403, 163, 29);
 		buttonReadUncommitted.addActionListener(this);
 		contentPane.add(buttonReadUncommitted);
 		
 		buttonReadCommitted = new JButton("Read Committed");
-		buttonReadCommitted.setBounds(6, 383, 163, 29);
+		buttonReadCommitted.setBounds(6, 433, 163, 29);
 		buttonReadCommitted.addActionListener(this);
 		contentPane.add(buttonReadCommitted);
 		
 		buttonReadRepeatable = new JButton("Read Repeatable");
-		buttonReadRepeatable.setBounds(181, 353, 163, 29);
+		buttonReadRepeatable.setBounds(181, 403, 163, 29);
 		buttonReadRepeatable.addActionListener(this);
 		contentPane.add(buttonReadRepeatable);
 		
 		buttonSerializable = new JButton("Serializable");
-		buttonSerializable.setBounds(181, 383, 163, 29);
+		buttonSerializable.setBounds(181, 433, 163, 29);
 		buttonSerializable.addActionListener(this);
 		contentPane.add(buttonSerializable);
 		
@@ -106,7 +107,7 @@ public class MainGUI extends JFrame implements ActionListener {
 		contentPane.add(table);
 		
 		scrollPaneTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPaneTable.setBounds(392, 6, 802, 466);
+		scrollPaneTable.setBounds(392, 6, 802, 516);
 		contentPane.add(scrollPaneTable);
 		
 		labelRowsReturned = new JLabel("");
@@ -116,6 +117,26 @@ public class MainGUI extends JFrame implements ActionListener {
 		labelQueryRuntime = new JLabel("");
 		labelQueryRuntime.setBounds(135, 448, 210, 16);
 		contentPane.add(labelQueryRuntime);
+		
+		chckbxNode1 = new JCheckBox("Node1");
+		chckbxNode1.setBounds(62, 373, 78, 23);
+		contentPane.add(chckbxNode1);
+		
+		chckbxNode2 = new JCheckBox("Node2");
+		chckbxNode2.setBounds(152, 373, 78, 23);
+		contentPane.add(chckbxNode2);
+		
+		chckbxNode3 = new JCheckBox("Node3");
+		chckbxNode3.setBounds(242, 373, 78, 23);
+		contentPane.add(chckbxNode3);
+		
+		JButton buttonGlobal = new JButton("Global");
+		buttonGlobal.setBounds(52, 343, 117, 29);
+		contentPane.add(buttonGlobal);
+		
+		JButton buttonLocal = new JButton("Local");
+		buttonLocal.setBounds(214, 343, 117, 29);
+		contentPane.add(buttonLocal);
 	}
 
 // ACTION LISTENERS

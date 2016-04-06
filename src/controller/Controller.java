@@ -22,4 +22,6 @@ public class Controller {
 	{
 		return databaseManager.getQueryTime();
 	}
+	
+	//public 
 }
