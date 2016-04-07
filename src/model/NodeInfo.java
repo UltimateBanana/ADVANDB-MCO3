@@ -4,15 +4,16 @@ import java.util.HashMap;
 
 public class NodeInfo {
 	
-	String ipAdd, user, password;
+	String ipAdd, user, password, dbType;
 	int portNum;
 	
-	public NodeInfo(String ip, String user, String pass, int port)
+	public NodeInfo(String ip, String user, String pass, int port, String dbType)
 	{
 		this.ipAdd = ip;
 		this.user = user;
 		this.password = pass;
 		this.portNum = port;
+		this.dbType = dbType;
 	}
 
 // GETTERS
@@ -32,7 +33,12 @@ public class NodeInfo {
 		return portNum;
 	}
 
-// SETTERS
+	public String getDbType() {
+		return dbType;
+	}
+
+
+	// SETTERS
 	public void setIpAdd(String ipAdd) {
 		this.ipAdd = ipAdd;
 	}
@@ -49,4 +55,7 @@ public class NodeInfo {
 		this.portNum = portNum;
 	}
 	
+	public void setDbType(String dbType) {
+		this.dbType = dbType;
+	}
 }

@@ -48,4 +48,9 @@ public class DatabaseManager {
 	{
 		return queryTime;
 	}
+	
+	public void changeConnection(int id)
+	{
+		connection.changeConnection(id);
+	}
 }

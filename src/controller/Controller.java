@@ -23,5 +23,26 @@ public class Controller {
 		return databaseManager.getQueryTime();
 	}
 	
-	//public 
+	public void changeConnection(String dbType)
+	{
+		int id = 0;
+		
+		if(dbType.equals("central"))
+		{
+			id = 0;
+			System.out.println("central");
+		}
+		else if(dbType.equals("palawan"))
+		{
+			id = 1;
+			System.out.println("palawan");
+		}
+		else if(dbType.equals("marinduque"))
+		{
+			id = 2;
+			System.out.println("marinduque");
+		}
+		
+		databaseManager.changeConnection(id);
+	}
 }

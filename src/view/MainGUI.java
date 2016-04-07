@@ -24,6 +24,9 @@ import javax.swing.JTable;
 import controller.Controller;
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
+import javax.swing.JTabbedPane;
+import java.awt.Component;
+import javax.swing.ScrollPaneConstants;
 
 public class MainGUI extends JFrame implements ActionListener {
 
@@ -36,8 +39,8 @@ public class MainGUI extends JFrame implements ActionListener {
 	private JScrollPane scrollPaneTextArea, scrollPaneTable;
 	private JTable table;
 	private JLabel labelRowsReturned, labelQueryRuntime;
-	private JCheckBox chckbxNode1, chckbxNode2, chckbxNode3;
-//	private
+	private JCheckBox chckbxMarinduque, chckbxPalawan;
+	private JTabbedPane tabbedPaneTextArea;
 //	private
 //	private
 
@@ -61,6 +64,10 @@ public class MainGUI extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		tabbedPaneTextArea = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPaneTextArea.setBounds(10, 6, 372, 335);
+		contentPane.add(tabbedPaneTextArea);
+		
 		textAreaQuery =  new JTextArea();
 		textAreaQuery.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		textAreaQuery.setBounds(6, 6, 380, 335);
@@ -68,8 +75,7 @@ public class MainGUI extends JFrame implements ActionListener {
 		contentPane.add(textAreaQuery);
 		
 		scrollPaneTextArea = new JScrollPane(textAreaQuery, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPaneTextArea.setBounds(10, 6, 370, 335);
-		contentPane.add(scrollPaneTextArea);
+		tabbedPaneTextArea.addTab("Transaction", null, scrollPaneTextArea, null);
 		
 		buttonClearQuery = new JButton("Clear Query");
 		buttonClearQuery.setBounds(6, 493, 117, 29);
@@ -118,17 +124,15 @@ public class MainGUI extends JFrame implements ActionListener {
 		labelQueryRuntime.setBounds(135, 448, 210, 16);
 		contentPane.add(labelQueryRuntime);
 		
-		chckbxNode1 = new JCheckBox("Node1");
-		chckbxNode1.setBounds(62, 373, 78, 23);
-		contentPane.add(chckbxNode1);
+		chckbxMarinduque = new JCheckBox("Marinduque");
+		chckbxMarinduque.setBounds(62, 373, 107, 23);
+		chckbxMarinduque.addActionListener(this);
+		contentPane.add(chckbxMarinduque);
 		
-		chckbxNode2 = new JCheckBox("Node2");
-		chckbxNode2.setBounds(152, 373, 78, 23);
-		contentPane.add(chckbxNode2);
-		
-		chckbxNode3 = new JCheckBox("Node3");
-		chckbxNode3.setBounds(242, 373, 78, 23);
-		contentPane.add(chckbxNode3);
+		chckbxPalawan = new JCheckBox("Palawan");
+		chckbxPalawan.setBounds(234, 373, 82, 23);
+		chckbxPalawan.addActionListener(this);
+		contentPane.add(chckbxPalawan);
 		
 		JButton buttonGlobal = new JButton("Global");
 		buttonGlobal.setBounds(52, 343, 117, 29);
@@ -143,6 +147,8 @@ public class MainGUI extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		
+		//BUTTONS
 		if(e.getSource() == buttonClearQuery)
 		{
 			textAreaQuery.setText("");
@@ -179,7 +185,26 @@ public class MainGUI extends JFrame implements ActionListener {
 		{
 			
 		}
+		
+		//CHECKBOXES
+		if(chckbxMarinduque.isSelected())
+		{
+			System.out.println("chckbxMarinduque is clicked");
+			controller.changeConnection("marinduque");
+		}
+		else if(chckbxPalawan.isSelected())
+		{
+			System.out.println("chckbxPalawan is clicked");
+			controller.changeConnection("palawan");
+		}
+		else if(chckbxPalawan.isSelected() && chckbxPalawan.isSelected())
+		{
+			System.out.println("chckbxMarinduque & chckbxPalawan is clicked");
+			controller.changeConnection("central");
+		}
 	}
+	
+	
 	
 	// Populates the JTable using the ResultSet parameter
 	private void populateTable(ResultSet rs)
